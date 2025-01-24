@@ -90,13 +90,13 @@ double* strassen(double* a, double* b, int* positions, int subsize, int fullsize
         // Recursive calls with updated positions
         return vertcat(
             horizontalcat(
-                strassen(a, b, ae, halfSize, fullsize), //a
-                strassen(a, b, af, halfSize, fullsize), //b
+                strassen(a, b, ae, halfSize, fullsize)+strassen(a, b, bg, halfSize, fullsize), //a
+                strassen(a, b, af, halfSize, fullsize)+strassen(a, b, bh, halfSize, fullsize), //b
                 halfSize
             ), 
             horizontalcat(
-                strassen(a, b, ce, halfSize, fullsize), //c
-                strassen(a, b, cf, halfSize, fullsize), //d
+                strassen(a, b, ce, halfSize, fullsize)+strassen(a, b, dg, halfSize, fullsize), //c
+                strassen(a, b, cf, halfSize, fullsize)+strassen(a, b, dh, halfSize, fullsize), //d
                 halfSize
             ),
             halfSize
