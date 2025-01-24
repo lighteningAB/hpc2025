@@ -41,6 +41,15 @@ double* vertcat(double* a, double* b, int n){
     return returnable;
 }
 
+//add two arrays of size (n,n)
+double* vecadd(double * a, double * b, int n){
+    double * returnable = new double [n*n];
+    for(int i = 0; i<n*n; i++){
+        *(returnable+i)=*(a+i)+*(b+i);
+    }
+    return returnable;
+}
+
 double* strassen(double* a, double* b, int* positions, int subsize, int fullsize){
     // base case, outputs a 2x2 matrix, flattened
     if (subsize == 2) {
@@ -87,16 +96,24 @@ double* strassen(double* a, double* b, int* positions, int subsize, int fullsize
         int cf[] = {a21_start, b12_start};
         int dh[] = {a22_start, b22_start};
         
+        double* ae_n = strassen(a, b, ae, halfSize, fullsize);
+        double* bg_n = strassen(a, b, bg, halfSize, fullsize);
+        double* af_n = strassen(a, b, af, halfSize, fullsize);
+        double* bh_n = strassen(a, b, bh, halfSize, fullsize);
+        double* ce_n = strassen(a, b, ce, halfSize, fullsize);
+        double* dg_n = strassen(a, b, dg, halfSize, fullsize);
+        double* cf_n = strassen(a, b, cf, halfSize, fullsize);
+        double* dh_n = strassen(a, b, dh, halfSize, fullsize);
         // Recursive calls with updated positions
         return vertcat(
             horizontalcat(
-                strassen(a, b, ae, halfSize, fullsize)+strassen(a, b, bg, halfSize, fullsize), //a
-                strassen(a, b, af, halfSize, fullsize)+strassen(a, b, bh, halfSize, fullsize), //b
+                vecadd(ae_n, bg_n, halfSize), //a
+                vecadd(af_n, bh_n, halfSize), //b
                 halfSize
             ), 
             horizontalcat(
-                strassen(a, b, ce, halfSize, fullsize)+strassen(a, b, dg, halfSize, fullsize), //c
-                strassen(a, b, cf, halfSize, fullsize)+strassen(a, b, dh, halfSize, fullsize), //d
+                vecadd(ce_n, dg_n, halfSize), //c
+                vecadd(cf_n, dh_n, halfSize), //d
                 halfSize
             ),
             halfSize
@@ -108,7 +125,7 @@ double* strassen(double* a, double* b, int* positions, int subsize, int fullsize
 int main() {
     // Test matrices
     double matrix_a[64] = {
-    1, 1, 1, 1, 1, 1, 1, 1,
+    2, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 1, 1, 1, 1, 1, 1,
