@@ -78,21 +78,25 @@ double* strassen(double* a, double* b, int* positions, int subsize, int fullsize
         int b22_start = positions[1] + halfSize * fullsize + halfSize;
         
         // New positions array for recursive calls
-        int new_positions_a11[] = {a11_start, b11_start};
-        int new_positions_a12[] = {a11_start, b12_start};
-        int new_positions_a21[] = {a21_start, b11_start};
-        int new_positions_a22[] = {a21_start, b12_start};
+        int ae[] = {a11_start, b11_start};
+        int bg[] = {a12_start, b21_start};
+        int af[] = {a11_start, b12_start};
+        int bh[] = {a12_start, b22_start};
+        int ce[] = {a21_start, b11_start};
+        int dg[] = {a22_start, b21_start};
+        int cf[] = {a21_start, b12_start};
+        int dh[] = {a22_start, b22_start};
         
         // Recursive calls with updated positions
         return vertcat(
             horizontalcat(
-                strassen(a, b, new_positions_a11, halfSize, fullsize), //a
-                strassen(a, b, new_positions_a12, halfSize, fullsize), //b
+                strassen(a, b, ae, halfSize, fullsize), //a
+                strassen(a, b, af, halfSize, fullsize), //b
                 halfSize
             ), 
             horizontalcat(
-                strassen(a, b, new_positions_a21, halfSize, fullsize), //c
-                strassen(a, b, new_positions_a22, halfSize, fullsize), //d
+                strassen(a, b, ce, halfSize, fullsize), //c
+                strassen(a, b, cf, halfSize, fullsize), //d
                 halfSize
             ),
             halfSize
