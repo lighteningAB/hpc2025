@@ -1,0 +1,31 @@
+(base) password@patrickm24:~/hpc2025/chapter2$ g++ exercise2_2.cpp -o exercise2_2 -lboost_timer -lboost_system
+(base) password@patrickm24:~/hpc2025/chapter2$ ./exercise2_2
+The value of pi is 3.14161 using the first approximation, found in 50002 iterations
+The value of pi is 3.13766 using the second approximation, found in 200 iterations
+ 12.090000s wall, 10.990000s user + 0.000000s system = 10.990000s CPU (90.9%)
+(base) password@patrickm24:~/hpc2025/chapter2$ g++ -O2 exercise2_2.cpp -o exercise2_2 -lboost_timer -lboost_system
+(base) password@patrickm24:~/hpc2025/chapter2$ ./exercise2_2
+The value of pi is 3.14161 using the first approximation, found in 50002 iterations
+The value of pi is 3.13766 using the second approximation, found in 200 iterations
+ 10.170000s wall, 9.300000s user + 0.000000s system = 9.300000s CPU (91.4%)
+(base) password@patrickm24:~/hpc2025/chapter2$ time g++ -O2 exercise2_2.cpp -o exercise2_2 -lboost_timer -lboost_system
+
+real    0m0.350s
+user    0m0.236s
+sys     0m0.049s
+(base) password@patrickm24:~/hpc2025/chapter2$ time g++ -O0 exercise2_2.cpp -o exercise2_2 -lboost_timer -lboost_system
+
+real    0m0.291s
+user    0m0.191s
+sys     0m0.040s
+(base) password@patrickm24:~/hpc2025/chapter2$ time g++ -O2 exercise2_2.cpp -o exercise2_2 -lboost_timer -lboost_system
+
+real    0m0.326s
+user    0m0.195s
+sys     0m0.072s
+(base) password@patrickm24:~/hpc2025/chapter2$ ./exercise2_2
+The value of pi is 3.14161 using the first approximation, found in 50002 iterations
+The value of pi is 3.13766 using the second approximation, found in 200 iterations
+ 10.180000s wall, 9.380000s user + 0.000000s system = 9.380000s CPU (92.1%)
+(base) password@patrickm24:~/hpc2025/chapter2$ 
+
