@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
+#include <boost/timer/timer.hpp>
 
 double pi_4_approx(int n)
 {
@@ -24,10 +25,11 @@ double pi_2_approx(int n)
 }
 
 int main(){
+    boost::timer::auto_cpu_timer t;
     double prev = 100.0;
     double curr = 1000.0;
     int n = 1;
-    while (fabs(prev-curr)>0.0000001){
+    while (fabs(prev-curr)>0.00001){
         prev = curr;
         curr = pi_4_approx(n);
         n+=1;
@@ -36,7 +38,7 @@ int main(){
     prev = 100;
     curr = 1000;
     n = 1;
-    while (fabs(prev-curr)>0.0000001){
+    while (fabs(prev-curr)>0.00001){
         prev = curr;
         curr = pi_2_approx(n);
         n+=1;
