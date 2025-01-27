@@ -1,0 +1,2 @@
+g++ -o compiler-norm.o -c compiler-norm.cpp
+// compile a function without a main
