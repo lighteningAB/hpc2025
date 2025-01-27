@@ -79,5 +79,6 @@ int main(int argc, char *argv[])
     {
         std::cout << b[i] << " ";
     }
+    delete[] a;
     return 0;
 }
