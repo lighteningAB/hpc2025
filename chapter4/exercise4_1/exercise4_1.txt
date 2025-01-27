@@ -16,3 +16,5 @@
 0.76823
 0.277775
 0.55397
+
+g++ exercise4_1.cpp -o exercise4_1.o -lboost_program_options -lblas
