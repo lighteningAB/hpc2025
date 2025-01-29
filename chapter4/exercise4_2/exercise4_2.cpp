@@ -18,19 +18,41 @@ extern "C"
     void F77NAME(dgemm)(const char &transa, const char &transb, const int &m, const int &n, const int &k,
                         const double &alpha, const double *a, const int &lda, const double *b, const int &ldb,
                         const double &beta, double *c, const int &ldc);
+    void F77NAME(daxpy)(const int &n, const double &alpha, const double *x, const int &incx, double *y,
+                        const int &incy);
 }
 
 // blas array multiplication
 void multarrays(double *a, double *b, double *c, int n)
 {
     F77NAME(dgemm)
-    ('N', 'N', n, n, n, 1.0, a, n, b, n, 0.0, c, n);
+    ('T', 'T', n, n, n, 1.0, a, n, b, n, 0.0, c, n);
 }
 
 // manual array multiplication
-void manualmultarrays(double *a, double *b, double *c)
+void manualmultarrays(double *a, double *b, double *c, int n)
 {
-    
+    // accessing each row of a
+    for (int i = 0; i < n; i++)
+    {
+        // accessing each column of b
+        for (int j = 0; j < n; j++)
+        {
+            double sum = 0;
+            // going down b's column
+            for (int k = 0; k < n; k++)
+            {
+                sum += a[i * n + k] * b[k * n + j];
+            }
+            c[i * n + j] = sum;
+        }
+    }
+}
+
+void subtractArrays(double *a, double *b, double *c, int n)
+{
+    F77NAME(daxpy)
+    (n, -1.0, b, 1, a, 1);
 }
 
 int main(int argc, char *argv[])
@@ -47,8 +69,10 @@ int main(int argc, char *argv[])
     double *a = new double[size * size];
     double *b = new double[size * size];
     double *c = new double[size * size];
+    double *c2 = new double[size * size];
+    double *c3 = new double[size * size];
 
-    double max = 5.0;
+    double max = 1.0;
     for (int i = 0; i < size * size; i++)
     {
         a[i] = (double)rand() / RAND_MAX * max;
@@ -63,6 +87,7 @@ int main(int argc, char *argv[])
         }
         std::cout << std::endl;
     }
+    std::cout << "_________" << std::endl;
 
     for (int i = 0; i < size; i++)
     {
@@ -72,6 +97,7 @@ int main(int argc, char *argv[])
         }
         std::cout << std::endl;
     }
+    std::cout << "_________" << std::endl;
 
     multarrays(a, b, c, size);
 
@@ -80,6 +106,30 @@ int main(int argc, char *argv[])
         for (int j = 0; j < size; j++)
         {
             std::cout << c[i * size + j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "_________" << std::endl;
+
+    manualmultarrays(a, b, c2, size);
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            std::cout << c2[i * size + j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "_________" << std::endl;
+
+    subtractArrays(c, c2, c3, n);
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            std::cout << c3[i * size + j] << " ";
         }
         std::cout << std::endl;
     }
