@@ -11,6 +11,7 @@ extern "C"
                         const double &beta, double *c, const int &ldc);
     void F77NAME(dgemv)(const char &transa, const int &m, const int &n, const double &alpha, const double *a, const int &lda,
                         const double *x, const int &incx, const double &beta, double *y, const int &incy);
+    void F77NAME(daxpy)(const int &n , const double &alpha, const double *x, const int &incx, double *y, const int &incy);
 }
 //1
 void squarematgen(int n, double *a){
@@ -47,7 +48,16 @@ int main(){
     vecgen(n, x);
     inplacesym(m, n);
     double* b = new double[n];
-    matvecmul(m, x, b, n);
+    matvecmul(m, x, b, n); //b = Ax
+    double* x0 = new double[n];
+    for (int i = 0; i<=n; i++){
+        x0[i] = 0;
+    }
 
-    //do later
+    double *r = new double[n];
+    F77NAME(daxpy)(n, 1, b, 1, r, 1); //r = b
+    double * c = new double[n];
+    matvecmul(m, x0, c, n); //Ax0
+    F77NAME(daxpy)(n, -1, c, 1, r, 1); //r = r0
+    //write loop later
 }
