@@ -39,3 +39,15 @@ void matvecmul(double* a, double* b, double* c, int n){
 }
 
 //4
+int main(){
+    int n = 5;
+    double* m = new double[n*n];
+    squarematgen(n, m);
+    double* x = new double[n];
+    vecgen(n, x);
+    inplacesym(m, n);
+    double* b = new double[n];
+    matvecmul(m, x, b, n);
+
+    //do later
+}
