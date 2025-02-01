@@ -105,7 +105,9 @@ int main()
         F77NAME(daxpy)(n, a_k * -1, helpervec_2, 1, r, 1);
         // r_k+1 = r_k - a_k*a*p_k
         double stop = F77NAME(dnrm2)(n, r, 1);
-        // insert break conditions
+        if (stop<0.01){
+            break;
+        }
         double B_k = vecmult(n, r, r) / vecmult(n, r_prev, r_prev);
         // B_k = r_k+1^t * r_k+1/ r_k^t * r_k
         double *p_prev = new double[n];
