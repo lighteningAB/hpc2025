@@ -13,7 +13,9 @@ extern "C"
                         const double *x, const int &incx, const double &beta, double *y, const int &incy);
     void F77NAME(daxpy)(const int &n, const double &alpha, const double *x, const int &incx, double *y, const int &incy);
     void F77NAME(dger)(const int &n, const int &m, const double &alpha, const double *x, const int &incx, const double *y,
-                       const int &incy, double *a, const int &LDA)
+                       const int &incy, double *a, const int &LDA);
+    double F77NAME(ddot)(const int &n, const double *x, const int &incx, const double *y, const int &incy);
+    double F77NAME(dnrm2)(const int &n, const double *x, const int &incx);
 }
 // 1
 void squarematgen(int n, double *a)
@@ -47,6 +49,10 @@ void matvecmul(double *a, double *b, double *c, int n)
     F77NAME(dgemv)('T', n, n, 1.0, a, n, b, 1, 0.0, c, 1);
 }
 
+double vecmult(int n, double *x, double *y)
+{
+    return F77NAME(ddot)(n, x, 1, y, 1);
+}
 // 4
 int main()
 {
@@ -83,13 +89,23 @@ int main()
     int k = 0;
     while (0 == 0)
     { // replace with abs r_k+1 < eta break condition
-        double *a_k = new double[n * n];
-        double *a_k_top = new double[n * n];
-        F77NAME(dger)(n, n, 1.0, r, 1, r, 1, a_k_top, 1); // top part of fraction
-        double *vechelp = new double[n];
-        matvecmul(a, p, vechelp, n);
-        //F77NAME(dger)(n, n ) finish this shit later
+        double *bottomhelpervec = new double[n];
+        matvecmul(a, p, bottomhelpervec, n);
+        double a_k = vecmult(n, r, r) / vecmult(n, p, bottomhelpervec);
         // a_k = r_k^t * r_k / p_k^t*A*p_k
-        // x_k = x_k +
+        F77NAME(daxpy)(n, a_k, p, 1, x0, 1);
+        // x_k+1 = x_k + a_k*p_k
+        double *helpervec_2 = new double[n];
+        matvecmul(a, p, helpervec_2, n);
+        double *r_prev = new double[n];
+        for (int i = 0; i < n; i++)
+        {
+            r_prev[i] = r[i];
+        }
+        F77NAME(daxpy)(n, a_k, helpervec_2, 1, r, 1);
+        // r_k+1 = r_k - a_k*a*p_k
+        double stop = F77NAME(dnrm2)(n, r, 1);
+        // insert break conditions
+        // B_k = r_k+1^t * r_k+1/ r_k^t * r_k
     }
 }
