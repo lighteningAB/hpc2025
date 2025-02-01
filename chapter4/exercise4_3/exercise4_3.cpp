@@ -22,7 +22,7 @@ void squarematgen(int n, double *a)
 {
     for (int i = 0; i < n * n; i++)
     {
-        *(a + i) = (double)rand() * 2 / RAND_MAX - 1;
+        *(a + i) = -1.0 + ((double)rand() / RAND_MAX)*(2.0);
     }
 }
 
@@ -30,7 +30,7 @@ void vecgen(int n, double *a)
 {
     for (int i = 0; i < n; i++)
     {
-        *(a + i) = (double)rand() * 2 / RAND_MAX - 1;
+        *(a + i) = -1.0 + ((double)rand() / RAND_MAX)*(2.0);
     }
 }
 
@@ -89,7 +89,8 @@ int main()
     F77NAME(daxpy)(n, 1, r, 1, p, 1); // p0 = r0
     // cloning r0
     int k = 0;
-    int max_iter = 1000;
+    int max_iter = 100000;
+    double stop = 40;
     while (k < max_iter)
     { // replace with abs r_k+1 < eta break condition
         double *bottomhelpervec = new double[n];
@@ -107,8 +108,9 @@ int main()
         }
         F77NAME(daxpy)(n, a_k * -1, helpervec_2, 1, r, 1);
         // r_k+1 = r_k - a_k*a*p_k
-        double stop = F77NAME(dnrm2)(n, r, 1);
-        if (stop < 4)
+        stop = F77NAME(dnrm2)(n, r, 1);
+        //std::cout<<stop<<" cook"<<std::endl;
+        if (stop < 1)
         {
             break;
         }
@@ -119,7 +121,7 @@ int main()
         {
             p_prev[i] = p[i];
         }
-        F77NAME(daxpy)(n, a_k, helpervec_2, 1, p, 1); // p_k+1 = r_k+1
+        F77NAME(daxpy)(n, a_k * -1, helpervec_2, 1, p, 1); // p_k+1 = r_k+1
         F77NAME(daxpy)(n, B_k, p_prev, 1, p, 1);
         // p_k+1 = r_k+1 + B_k*p_k
         k += 1;
@@ -128,6 +130,7 @@ int main()
         delete[] r_prev;
         delete[] p_prev;
     }
+    std::cout<<stop<<std::endl;
 
     std::cout << k << std::endl;
 
@@ -143,7 +146,7 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        std::cout << b[i] << " ";
+        std::cout << x[i] << " ";
     }
     std::cout << std::endl;
     std::cout << "_________________________" << std::endl;
