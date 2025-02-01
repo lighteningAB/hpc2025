@@ -108,8 +108,7 @@ int main()
         F77NAME(daxpy)(n, a_k * -1, helpervec_2, 1, r, 1);
         // r_k+1 = r_k - a_k*a*p_k
         double stop = F77NAME(dnrm2)(n, r, 1);
-        std::cout<<stop<<"we stoppin?"<<std::endl
-        if (stop < 0.01)
+        if (stop < 4)
         {
             break;
         }
