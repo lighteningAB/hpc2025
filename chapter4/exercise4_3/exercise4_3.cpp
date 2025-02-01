@@ -102,10 +102,38 @@ int main()
         {
             r_prev[i] = r[i];
         }
-        F77NAME(daxpy)(n, a_k, helpervec_2, 1, r, 1);
+        F77NAME(daxpy)(n, a_k * -1, helpervec_2, 1, r, 1);
         // r_k+1 = r_k - a_k*a*p_k
         double stop = F77NAME(dnrm2)(n, r, 1);
         // insert break conditions
+        double B_k = vecmult(n, r, r) / vecmult(n, r_prev, r_prev);
         // B_k = r_k+1^t * r_k+1/ r_k^t * r_k
+        double *p_prev = new double[n];
+        for (int i = 0; i < n; i++)
+        {
+            p_prev[i] = p[i];
+        }
+        F77NAME(daxpy)(n, a_k, helpervec_2, 1, p, 1); // p_k+1 = r_k+1
+        F77NAME(daxpy)(n, B_k, p_prev, 1, p, 1);
+        // p_k+1 = r_k+1 + B_k*p_k
+        k += 1;
+        delete[] bottomhelpervec;
+        delete[] helpervec_2;
+        delete[] r_prev;
+        delete[] p_prev;
     }
+
+    for (int i = 1; i < n; i++)
+    {
+        std::cout << x0[i] << " ";
+    }
+    std::cout << std::endl;
+
+    delete[] a;
+    delete[] x;
+    delete[] b;
+    delete[] x0;
+    delete[] r;
+    delete[] c;
+    delete[] p;
 }
