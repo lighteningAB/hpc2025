@@ -39,7 +39,7 @@ void inplacesym(double *a, int n)
 {
     double *b = new double[n * n];
     F77NAME(dgemm)('T', 'N', n, n, n, 1.0, a, n, a, n, 0.0, b, n);
-    a = b;
+    std::copy(b, b + n * n, a); // Copy contents of b to a
     delete[] b;
 }
 
@@ -69,13 +69,14 @@ int main()
     matvecmul(a, x, b, n); // b = Ax
     // fill in vector b with vector product of A and x
     double *x0 = new double[n];
-    for (int i = 0; i <= n; i++)
+    for (int i = 0; i < n; i++)
     {
-        x0[i] = 0;
+        x0[i] = 1;
     }
-    // generate x0 of zeroes
+    // generate x0 of ones
 
     double *r = new double[n];
+    std::fill(r, r + n, 0.0);
     F77NAME(daxpy)(n, 1, b, 1, r, 1); // r = b
     // use vector sum to make vector r equal to b
     double *c = new double[n];
@@ -84,10 +85,12 @@ int main()
     F77NAME(daxpy)(n, -1, c, 1, r, 1); // r = r0
     // create r0 where r0 = b-Ax0
     double *p = new double[n];
+    std::fill(p, p + n, 0.0);
     F77NAME(daxpy)(n, 1, r, 1, p, 1); // p0 = r0
     // cloning r0
     int k = 0;
-    while (0 == 0)
+    int max_iter = 1000;
+    while (k < max_iter)
     { // replace with abs r_k+1 < eta break condition
         double *bottomhelpervec = new double[n];
         matvecmul(a, p, bottomhelpervec, n);
@@ -105,7 +108,8 @@ int main()
         F77NAME(daxpy)(n, a_k * -1, helpervec_2, 1, r, 1);
         // r_k+1 = r_k - a_k*a*p_k
         double stop = F77NAME(dnrm2)(n, r, 1);
-        if (stop<0.01){
+        if (stop < 0.01)
+        {
             break;
         }
         double B_k = vecmult(n, r, r) / vecmult(n, r_prev, r_prev);
@@ -125,7 +129,26 @@ int main()
         delete[] p_prev;
     }
 
-    for (int i = 1; i < n; i++)
+    std::cout << k << std::endl;
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            std::cout << a[i * n + j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "_________________________" << std::endl;
+
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << b[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "_________________________" << std::endl;
+
+    for (int i = 0; i < n; i++)
     {
         std::cout << x0[i] << " ";
     }
