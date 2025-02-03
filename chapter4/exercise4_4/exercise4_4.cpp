@@ -1,3 +1,4 @@
+#include <math.h>
 // helmholtz
 
 // generate reduced matrix symmetric n=21
@@ -37,5 +38,24 @@ void symmetric(double a, double b, int n, double *returnable)
             returnable[counter + 1] = a;
             counter += 2;
         }
+    }
+}
+
+// forcing func calculation
+void forcfunc(double *a, int n)
+{
+    // function is -(theta+pi^2)sin(pi*x)
+    for (int i = 0; i < n; i++)
+    {
+        a[i] = -1 * (1 + pow(M_PI, 2)) * sin(M_PI * a[i]);
+    }
+}
+
+void forcfunc2(double *a, int n)
+{
+    // function is -(theta+pi^2)cos(pi*x)
+    for (int i = 0; i < n; i++)
+    {
+        a[i] = -1 * (1 + pow(M_PI, 2)) * cos(M_PI * a[i]);
     }
 }
