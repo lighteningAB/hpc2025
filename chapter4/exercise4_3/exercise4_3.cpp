@@ -71,7 +71,7 @@ int main()
     double *x0 = new double[n];
     for (int i = 0; i < n; i++)
     {
-        x0[i] = 1;
+        x0[i] = 0;
     }
     // generate x0 of ones
 
@@ -110,7 +110,7 @@ int main()
         // r_k+1 = r_k - a_k*a*p_k
         stop = F77NAME(dnrm2)(n, r, 1);
         //std::cout<<stop<<" cook"<<std::endl;
-        if (stop < 1)
+        if (stop < 0.00000001)
         {
             break;
         }
@@ -121,7 +121,7 @@ int main()
         {
             p_prev[i] = p[i];
         }
-        F77NAME(daxpy)(n, a_k * -1, helpervec_2, 1, p, 1); // p_k+1 = r_k+1
+        std::copy(r, r + n, p);  // p = r_k+1
         F77NAME(daxpy)(n, B_k, p_prev, 1, p, 1);
         // p_k+1 = r_k+1 + B_k*p_k
         k += 1;
