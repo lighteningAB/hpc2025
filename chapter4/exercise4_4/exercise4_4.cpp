@@ -85,9 +85,10 @@ void symmetricColMaj(double a, double b, int n, double *returnable)
             returnable[counter + 1] = b;
         }
         counter += 2;
-        for (int j = 0; j<n-2-i; j++){
+        for (int j = 0; j < n - 2 - i; j++)
+        {
             returnable[counter] = 0;
-            counter+=1;
+            counter += 1;
         }
     }
 }
@@ -155,14 +156,16 @@ void conjgradsolve(int n, double *a, double *b, double *x0)
     delete[] helpervec2;
     delete[] r_prev;
     delete[] p_prev;
-    std::cout << "found in " << k << "iterations" << std::endl;
+    std::cout << "found in " << k << " iterations" << std::endl;
 }
 
 int main()
 {
     int n = 19;
-    double *symmat = new double[n*n];
-    symmetricColMaj(1, 2.0, 19, symmat);
+    double *symmat = new double[n * n];
+    double alpha = -2/pow((2/20),2)-1;
+    double beta = 1/(pow(2/20,2));
+    symmetricColMaj(alpha, beta, 19, symmat);
     /*
     for (int i = 0; i<n; i++){
         for(int j = 0; j<n; j++){
@@ -171,7 +174,15 @@ int main()
         std::cout<<std::endl;
     }
     */
-   double *b = new double[n];
-   
-   conjgradsolve(n, symmat, )
+    double *b = new double[n];
+    forcfunc(b, n);
+    b[0] = 0;
+    b[n - 1] = 0;
+    double *x0 = new double[n];
+    conjgradsolve(n, symmat, b, x0);
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << x0[i] << " ";
+    }
+    std::cout << std::endl;
 }
