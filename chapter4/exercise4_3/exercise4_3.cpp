@@ -90,7 +90,7 @@ int main()
     int max_iter = 100000;
     double stop = 40;
     while (k < max_iter)
-    { // replace with abs r_k+1 < eta break condition
+    {
         double *bottomhelpervec = new double[n];
         matvecmul(a, p, bottomhelpervec, n);
         double a_k = vecmult(n, r, r) / vecmult(n, p, bottomhelpervec);

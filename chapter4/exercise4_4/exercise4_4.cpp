@@ -66,8 +66,46 @@ void forcfunc2(double *a, int n)
     }
 }
 
-void conjgradsolve(int n, double* a, double *b){
-    double * x0 = new double[n];
+void conjgradsolve(int n, double* a, double *b, double *x0){
     std::fill(x0, x0+n, 0.0);
-
+    double * r = new double[n];
+    std::copy(b, b+n, r);
+    double * c = new double[n];
+    matvecmul(a, x0, c, n); //Ax0
+    F77NAME(daxpy)(n, -1, c, 1, r, 1); //r=r0 ___ r0 = b-Ax0
+    double * p = new double[n];
+    std::copy(r, r+n, p); //p0 = r0, cloning r0
+    int k = 0;
+    int max_iter = 10000; //can make these inputs to the function
+    double stop = 40;
+    double *bottomhelpervec = new double[n]; //allocate memory
+    double *helpervec2 = new double[n];
+    double *r_prev = new double[n];
+    double *p_prev = new double[n];
+    while(k<max_iter){
+        matvecmul(a, p, bottomhelpervec, n);
+        double a_k = vecmult(n,r,r) / vecmult(n,p,bottomhelpervec); //a_k = r_k^t * r_k / (p_k^t*A*p_k)
+        F77NAME(daxpy)(n, a_k, p, 1, x0, 1); //x_k+1 = x_k + a_k*p_k
+        std::copy(r, r+n, r_prev);
+        matvecmul(a, p, helpervec2, n); 
+        F77NAME(daxpy)(n, a_k * -1, helpervec2, 1, r, 1); //r_k+1 = r_k - a_k*a*p_k
+        stop = F77NAME(dnrm2)(n, r, 1);
+        if (stop < 0.0000001){
+            break;
+        }
+        double B_k = vecmult(n,r,r) / vecmult(n,r_prev,r_prev); //B_k = r_k+1^t * r_k+1 / r_k^t * r_k
+        std::copy(p, p+n, p_prev);
+        std::copy(r, r+n, p); //p = r_k+1
+        F77NAME(daxpy)(n, B_k, p_prev, 1, p, 1); //p_k+1 = r_k+1 + B_k*p_k
+        k += 1;
+    }
+    
+    delete[] r;
+    delete[] c;
+    delete[] p;
+    delete[] bottomhelpervec;
+    delete[] helpervec2;
+    delete[] r_prev;
+    delete[] p_prev;
+    std::cout<<"found in " << k << "iterations" <<std::endl;
 }
