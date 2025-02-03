@@ -163,8 +163,8 @@ int main()
 {
     int n = 19;
     double *symmat = new double[n * n];
-    double alpha = -2/pow((2/20),2)-1;
-    double beta = 1/(pow(2/20,2));
+    double alpha = -2/pow((.1),2)-1;
+    double beta = 1/(pow(.1,2));
     symmetricColMaj(alpha, beta, 19, symmat);
     /*
     for (int i = 0; i<n; i++){
@@ -175,9 +175,21 @@ int main()
     }
     */
     double *b = new double[n];
+    for (int i = 0; i<n;i++){
+        b[i] = (i+1)*2.0/20.0;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << b[i] << " ";
+    }
+    std::cout << std::endl;
     forcfunc(b, n);
-    b[0] = 0;
-    b[n - 1] = 0;
+    b[n-1] += -2.0/pow(.1,2);
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << b[i] << " ";
+    }
+    std::cout << std::endl;
     double *x0 = new double[n];
     conjgradsolve(n, symmat, b, x0);
     for (int i = 0; i < n; i++)
@@ -185,4 +197,10 @@ int main()
         std::cout << x0[i] << " ";
     }
     std::cout << std::endl;
+    delete[] symmat;
+
+    for (int i = 0; i<n; i++){
+        std::cout << sin(M_PI*((i+1)*0.1)) << " ";
+    }
+    std::cout<<std::endl;
 }
