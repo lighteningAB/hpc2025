@@ -1,7 +1,5 @@
 // conjugate gradient method
-#include <iostream>
-#include <random>
-
+#include "exercise4_3.h"
 #define F77NAME(x) x##_
 
 extern "C"

@@ -59,3 +59,7 @@ void forcfunc2(double *a, int n)
         a[i] = -1 * (1 + pow(M_PI, 2)) * cos(M_PI * a[i]);
     }
 }
+
+void conjgradsolve(int n, double* a, double *b){
+    
+}
