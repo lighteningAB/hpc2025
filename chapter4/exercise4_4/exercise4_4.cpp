@@ -1,5 +1,11 @@
 #include <math.h>
+#include <exercise4_3.h>
+#define F77NAme(x) x##_
 // helmholtz
+extern "C"
+{
+    void F77NAME(daxpy)(const int &n, const double &alpha, const double *x, const int &incx, double *y, const int &incy);
+}
 
 // generate reduced matrix symmetric n=21
 // structure of B a B repeating, row 0 in positions -1 (not in) 0 , 1
@@ -61,5 +67,7 @@ void forcfunc2(double *a, int n)
 }
 
 void conjgradsolve(int n, double* a, double *b){
-    
+    double * x0 = new double[n];
+    std::fill(x0, x0+n, 0.0);
+
 }
