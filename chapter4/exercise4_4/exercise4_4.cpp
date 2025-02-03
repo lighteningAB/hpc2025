@@ -138,7 +138,7 @@ void conjgradsolve(int n, double *a, double *b, double *x0)
         matvecmul(a, p, helpervec2, n);
         F77NAME(daxpy)(n, a_k * -1, helpervec2, 1, r, 1); // r_k+1 = r_k - a_k*a*p_k
         stop = F77NAME(dnrm2)(n, r, 1);
-        if (stop < 0.0000001)
+        if (stop < 0.00000000000000001)
         {
             break;
         }
@@ -163,8 +163,8 @@ int main()
 {
     int n = 19;
     double *symmat = new double[n * n];
-    double alpha = -2/pow((.1),2)-1;
-    double beta = 1/(pow(.1,2));
+    double alpha = -2.0/pow((.1),2)-1.0;
+    double beta = 1.0/(pow(.1,2));
     symmetricColMaj(alpha, beta, 19, symmat);
     /*
     for (int i = 0; i<n; i++){
@@ -178,17 +178,20 @@ int main()
     for (int i = 0; i<n;i++){
         b[i] = (i+1)*2.0/20.0;
     }
+    /*
     for (int i = 0; i < n; i++)
     {
         std::cout << b[i] << " ";
     }
     std::cout << std::endl;
+    */
     forcfunc(b, n);
-    b[n-1] += -2.0/pow(.1,2);
+    /*
     for (int i = 0; i < n; i++)
     {
         std::cout << b[i] << " ";
     }
+    */
     std::cout << std::endl;
     double *x0 = new double[n];
     conjgradsolve(n, symmat, b, x0);
@@ -197,10 +200,74 @@ int main()
         std::cout << x0[i] << " ";
     }
     std::cout << std::endl;
-    delete[] symmat;
-
+    std::cout << std::endl;
     for (int i = 0; i<n; i++){
         std::cout << sin(M_PI*((i+1)*0.1)) << " ";
     }
     std::cout<<std::endl;
+
+    for (int i = 0; i<n; i++){
+        std::cout <<sin(M_PI*((i+1)*0.1)) - (x0[i]) << " ";
+    }
+    std::cout<<std::endl;
+
+    int m = 29;
+    double *symmat2 = new double[m * m];
+    alpha = -2.0/pow((.1),2)-1.0;
+    beta = 1.0/(pow(.1,2));
+    symmetricColMaj(alpha, beta, 29, symmat2);
+    /*
+    for (int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++){
+            std::cout<<symmat[i*n+j]<<" ";
+        }
+        std::cout<<std::endl;
+    }
+    */
+    double *c = new double[m];
+    for (int i = 0; i<m;i++){
+        c[i] = (i+1)*.1;
+    }
+    /*
+    for (int i = 0; i < m; i++)
+    {
+        std::cout << c[i] << " ";
+    }
+    */
+    std::cout << std::endl;
+    forcfunc2(c, m);
+    c[0] += -1/pow(.1,2);
+    c[m-1] += 1/pow(.1,2);
+    /*
+    for (int i = 0; i < n; i++)
+    {
+        std::cout << c[i] << " ";
+    }
+    */
+    std::cout << std::endl;
+    double *x02 = new double[m];
+    conjgradsolve(m, symmat2, c, x02);
+    for (int i = 0; i < m; i++)
+    {
+        std::cout << x02[i] << " ";
+    }
+    std::cout << std::endl;
+    
+
+    for (int i = 0; i<m; i++){
+        std::cout << cos(M_PI*((i+1)*0.1)) << " ";
+    }
+    std::cout<<std::endl;
+
+    for (int i = 0; i<m; i++){
+        std::cout << cos(M_PI*((i+1)*0.1)) - (x02[i]) << " ";
+    }
+    std::cout<<std::endl;
+
+    delete[] symmat;
+    delete[] symmat2;
+    delete[] b;
+    delete[] c;
+    delete[] x0;
+    delete[] x02;
 }
