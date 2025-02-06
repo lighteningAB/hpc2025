@@ -2,9 +2,17 @@
 
 #include "exercise5_1.h"
 
-void conjgradsolvelapack(int n, double *a, double* b){
-    int info = 0;
-    F77NAME(dposv)('L', n, 1, a, n, b, 1, info);
+void convertToFull(double* packed, double* full, int n) {
+    // Zero out full matrix first
+    for (int i = 0; i < n * n; i++) {
+        full[i] = packed[i];
+    }
+
+    for (int i = 0; i<n; i++){
+        for (int j = i+1; j<n; j++){
+            full[j*n+i] = packed[i*n+j];
+        }
+    }
 }
 
 int main(){
@@ -13,6 +21,13 @@ int main(){
     double alpha = -2.0/pow((.1),2)-1.0;
     double beta = 1.0/(pow(.1,2));
     symmetricColMaj(alpha, beta, 19, symmat);
+
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<n; j++){
+            std::cout<<symmat[i*n+j]<<" ";
+        }
+        std::cout<<std::endl;
+    }
 
     double *b = new double[n];
     for (int i = 0; i<n;i++){
@@ -45,7 +60,13 @@ int main(){
     std::cout<<std::endl;   
 
     std::cout<<"using lapack"<<std::endl;
-    conjgradsolvelapack(n, symmat, b);
+
+    double* fullMatrix = new double[n * n];
+    convertToFull(symmat, fullMatrix, n);
+
+    int* ipiv = new int[n]; // Vector for pivots
+    int info = 0;
+    F77NAME(dgesv)(n, 1, fullMatrix, n, ipiv, b, n, info);
 
     //lapack solution
     for (int i = 0; i < n; i++)
@@ -61,7 +82,7 @@ int main(){
     }
     std::cout<<std::endl;   
 
-
+    delete[] ipiv;
     delete[] symmat;
     delete[] b;
     delete[] x0;
