@@ -16,7 +16,7 @@ extern "C"
 }
 
 void matvecmul(double *a, double *b, double *c, int n);
-double vecmult(int n, double *x, double *y);\
+double vecmult(int n, double *x, double *y);
 void symmetricRowMaj(double a, double b, int n, double *returnable);
 void symmetricColMaj(double a, double b, int n, double *returnable);
 void forcfunc(double *a, int n);
