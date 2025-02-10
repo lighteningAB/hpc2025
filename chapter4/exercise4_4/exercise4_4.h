@@ -10,7 +10,7 @@ extern "C"
 {
     void F77NAME(daxpy)(const int &n, const double &alpha, const double *x, const int &incx, double *y, const int &incy);
     double F77NAME(ddot)(const int &n, const double *x, const int &incx, const double *y, const int &incy);
-    double F77NAME(dsymv)(const char &uplo, const int &n, const double &alpha, const double *a, const int &lda,
+    void F77NAME(dsymv)(const char &uplo, const int &n, const double &alpha, const double *a, const int &lda,
                           const double *x, const int &incx, const double &beta, double *y, const int &incy);
     double F77NAME(dnrm2)(const int &n, const double *x, const int &incx);
 }
