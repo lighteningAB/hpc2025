@@ -16,8 +16,7 @@ void matvecmulband(double *a, double *b, double *c, int n, int m, int kl, int ku
 
 //generate banded matrix
 //banded matrix 3*n
-void genA(double ts, double dx, double * returnable, int n){
-    double v = ts/dx/dx;
+void genA(double v, double * returnable, int n){
     int position = 0;
     for (int i = 0; i < n; i++)
     {
@@ -29,9 +28,9 @@ void genA(double ts, double dx, double * returnable, int n){
 }
 
 //generate vector
-void initialVec(double ss, int gridp, double * x){
+void initialVec(int gridp, double * x){
     for(int i = 0; i<gridp; i++){
-        x[i] = sin(M_PI*i*ss);
+        x[i] = sin(M_PI*double(i)/double(gridp));
     }
 }
 
@@ -50,19 +49,31 @@ int main(){
     std::cin>>ts;
     std::cout<<std::endl;
 
-    double * A = new double[3*gridp];
+    double * A = new double[gridp*3];
     double * x = new double[gridp];
     double * x1 = new double[gridp];
-    genA(ts, ss, A, gridp);
-    initialVec(ss, gridp, x);
-    int tries = 100;
+    double dx = 1/double(gridp);
+    double v = (ss/dx)/dx;
+    std::cout<<v<<" "<<std::endl;
+    genA(v, A, gridp);
+    for(int i = 0; i<3; i++){
+        for(int j = 0; j<gridp; j++){
+            std::cout<<A[i*gridp+j]<<" ";
+        }
+        std::cout<<std::endl;
+    }
+    initialVec(gridp, x);
+    x[0] = 0;
+    x[gridp-1] = 0;
     std::ofstream file("vector_evolution.csv");
-    for(int i = 0; i<tries; i++){
+    for(int i = 0; i<ts; i++){
         for (int i = 0; i < gridp; i++) {
-            file << x[i] << (i < gridp - 1 ? "," : "\n");
+            file << x[i] << (i < gridp-1 ? "," : "\n");
         }
         matvecmulband(A, x, x1, gridp, 3, 1, 1);
-        std::copy(x, x+gridp, x1);
+        std::copy(x1, x1+gridp, x);
+        x[0] = 0;
+        x[gridp-1] = 0;
     }
     file.close();
     std::cout << "Data saved to vector_evolution.csv\n";
