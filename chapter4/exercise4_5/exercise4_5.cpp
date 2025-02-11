@@ -3,7 +3,7 @@
 
 void matvecmulband(double *a, double *b, double *c, int n, int m, int kl, int ku)
 {
-    F77NAME(dgbmv)('N', n, n, kl, ku, 1.0, a, 3, b, 1, 0.0, c, 1);
+    F77NAME(dgbmv)('N', n, n, kl, ku, 1.0, a, 1+kl+ku, b, 1, 0.0, c, 1);
 }
 
 double vecmult(int n, double *x, double *y)
