@@ -86,4 +86,7 @@ int main()
     }
     //*/
     std::cout << ((hermitianVerify(n, c) == 1)? "true":"false") << std::endl;
+    delete[] a;
+    delete[] b;
+    delete[] c;    
 }
