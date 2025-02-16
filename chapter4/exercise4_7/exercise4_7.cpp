@@ -8,7 +8,7 @@ extern "C"
 {
     void F77NAME(zgemm)(const char &transa, const char &transb, const int &m, const int &n, const int &k,
                         const std::complex<double> &alpha, const std::complex<double> *a, const int &lda, const std::complex<double> *b,
-                        const int &ldb, const std::complex<double> &beta, const std::complex<double> *c, const int &ldc);
+                        const int &ldb, const std::complex<double> &beta, std::complex<double> *c, const int &ldc);
 }
 
 // a and b need to be size n*n
