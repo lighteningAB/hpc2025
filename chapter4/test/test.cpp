@@ -72,7 +72,7 @@ int main()
     double h = 1.0 / (double(n) - 1);
     for (int i = 0; i < n; i++)
     {
-        y[i] = bigX[i] - ((2 * M_PI * i * h) + cos(6 * M_PI * i * h) + 1.0);
+        y[i] = bigX[i] - (cos(2 * M_PI * i * h) + cos(6 * M_PI * i * h) + 1.0);
     }
     double diff = F77NAME(dznrm2)(n, y, 1);
     std::cout << diff << std::endl;
