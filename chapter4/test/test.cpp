@@ -34,7 +34,9 @@ void genX(int n, std::complex<double> *x)
 
 void multCompSym(int n, std::complex<double> *a, std::complex<double> *b, std::complex<double> *c)
 {
-    F77NAME(zsymv)('L', n, 1.0, a, n, b, 1, 0, c, 1);
+    std::complex<double> alpha = 1.0;
+    std::complex<double> beta = 0.0;
+    F77NAME(zsymv)('L', n, alpha, a, n, b, 1, beta, c, 1);
 }
 
 int main()
