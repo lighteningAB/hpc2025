@@ -112,7 +112,7 @@ double* blassen(double* a, double* b, int matsize, int ld){
 }
 
 int main(){
-    int n = 16;
+    int n = 32;
     int max = 3;
     double* a = new double [n*n];
     double* b = new double [n*n];
@@ -156,6 +156,13 @@ int main(){
         }
         std::cout << "\n";
     }
+
+    //verify same
+    int sum = 0;
+    for(int i = 0; i<n*n; i++){
+        sum+=d[i]-c[i];
+    }
+    std:: cout<<"\n"<<sum<<" is the difference between the two arrays"<<std::endl;
     delete[] a;
     delete[] b;
     delete[] c;
