@@ -33,7 +33,6 @@ double* horizontalcat(double* a, double* b, int n){
         }
     }
     return returnable;
-    delete[] returnable;
 }
 
 //concatenate two rectangular arrays of size (2n, n)
@@ -49,7 +48,6 @@ double* vertcat(double* a, double* b, int n){
         index++;
     }
     return returnable;
-    delete[] returnable;
 }
 
 //add two arrays of size (n,n)
@@ -59,7 +57,6 @@ double* vecadd(double * a, double * b, int n){
         *(returnable+i)=*(a+i)+*(b+i);
     }
     return returnable;
-    delete[] returnable;
 }
 
 /**
@@ -77,7 +74,6 @@ double* blassen(double* a, double* b, int matsize, int ld){
         double* result = new double[4];
         F77NAME(dgemm)('T', 'T', matsize, matsize, matsize, 1.0, a, ld, b, ld, 1.0, result, matsize);
         return result;
-        delete[] result; 
     }
     else{
         int halfsize = matsize/2;
@@ -90,14 +86,14 @@ double* blassen(double* a, double* b, int matsize, int ld){
         double * cf = new double[halfsize*halfsize];
         double * dh = new double[halfsize*halfsize];
 
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a, ld, b, ld, 1.0, ae, halfsize);
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize, ld, b+halfsize*ld, ld, 1.0, bg, halfsize);
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a, ld, b+halfsize, ld, 1.0, af, matsize);
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize, ld, b+halfsize*(ld+1), ld, 1.0, bh, halfsize);
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * ld, ld, b, ld, 1.0, ce, halfsize);
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * (ld+1), ld, b, ld, 1.0, dg, halfsize);
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * ld, ld, b+halfsize, ld, 1.0, cf, halfsize);
-        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * (ld+1), ld, b+halfsize*(ld+1), ld, 1.0, cf, halfsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a, ld, b, ld, 0.0, ae, halfsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize, ld, b+halfsize*ld, ld, 0.0, bg, halfsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a, ld, b+halfsize, ld, 0.0, af, matsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize, ld, b+halfsize*(ld+1), ld, 0.0, bh, halfsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * ld, ld, b, ld, 0.0, ce, halfsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * (ld+1), ld, b, ld, 0.0, dg, halfsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * ld, ld, b+halfsize, ld, 0.0, cf, halfsize);
+        F77NAME(dgemm)('T', 'T', halfsize, halfsize, halfsize, 1.0, a+halfsize * (ld+1), ld, b+halfsize*(ld+1), ld, 0.0, cf, halfsize);
         return vertcat(
             horizontalcat(
                 vecadd(ae, bg, halfsize),
@@ -111,14 +107,6 @@ double* blassen(double* a, double* b, int matsize, int ld){
             ),
             halfsize
         );
-        delete[] ae;
-        delete[] bg;
-        delete[] af;
-        delete[] bh;
-        delete[] ce;
-        delete[] dg;
-        delete[] cf;
-        delete[] dh;
     }
 }
 
@@ -149,7 +137,7 @@ int main(){
     }
 
     double* c = new double [n*n];
-    blassen(a, b, n, n);
+    c = blassen(a, b, n, n);
     std::cout << "Resulting Matrix:\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
