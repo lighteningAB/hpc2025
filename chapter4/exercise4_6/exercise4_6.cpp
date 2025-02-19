@@ -78,4 +78,3 @@ int main(){
     file.close();
     std::cout << "Data saved to vector_evolution.csv\n";
 }
-
