@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
+#include <boost/timer/timer.hpp>
 
 #define F77NAME(x) x##_
 
@@ -77,6 +78,7 @@ void initialVec(int gridp, double * x){
 
 int main()
 {
+    boost::timer::auto_cpu_timer t;
     //1
     int n = 5;
     double *returnable = new double[3 * n - 2];
