@@ -1,0 +1,1 @@
+(base) password@patrickm24:~/hpc2025/chapter5/exercise5_3$ g++ exercise5_3.cpp -o exercise5_3.o -llapack -lblas -lboost_system -lboost_filesystem -ljpeg
