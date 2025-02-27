@@ -1,0 +1,13 @@
+(base) user@XPS15:~/hpc2025/chapter12/exercise12_3$ mpicxx exercise12_3.cpp -o exercise12_3.o -lblas
+(base) user@XPS15:~/hpc2025/chapter12/exercise12_3$ mpiexec -np 16 --oversubscribe ./exercise12_3.o
+the norm of vector 1 is: 727.427
+the norm of vector 2 is: 829.802
+the dot product is: 29786.6
+(base) user@XPS15:~/hpc2025/chapter12/exercise12_3$ mpiexec -np 32 --oversubscribe ./exercise12_3.o
+the norm of vector 1 is: 1003.28
+the norm of vector 2 is: 1160.04
+the dot product is: 27821.9
+(base) user@XPS15:~/hpc2025/chapter12/exercise12_3$ mpiexec -np 4 --oversubscribe ./exercise12_3.o
+the norm of vector 1 is: 371.631
+the norm of vector 2 is: 374.778
+the dot product is: 26380.9
