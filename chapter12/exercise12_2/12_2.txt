@@ -1,0 +1,9 @@
+(base) password@patrickm24:~/hpc2025/chapter12/exercise12_2$ mpicxx exercise12_2.cpp -o exercise12_2.o
+(base) password@patrickm24:~/hpc2025/chapter12/exercise12_2$ mpiexec -np 5 ./exercise12_2.o
+enter an integer: 8
+
+process of rank 0, user integer is: 8 received from 5
+process of rank 1, user integer is: 8 received from 0
+process of rank 2, user integer is: 8 received from 1
+process of rank 3, user integer is: 8 received from 2
+process of rank 4, user integer is: 8 received from 3
