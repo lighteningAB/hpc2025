@@ -1,0 +1,9 @@
+(base) password@patrickm24:~/hpc2025/chapter12/exercise12_4$ mpicxx exercise12_4.cpp -o exercise12_4.o
+(base) password@patrickm24:~/hpc2025/chapter12/exercise12_4$ mpiexec -np 4 ./exercise12_4.o
+Enter the number of intervals: 9
+
+pi approxmated as 3.13954
+(base) password@patrickm24:~/hpc2025/chapter12/exercise12_4$ mpiexec -np 4 ./exercise12_4.o
+Enter the number of intervals: 100
+
+pi approxmated as 3.14158
