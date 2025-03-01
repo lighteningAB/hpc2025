@@ -1,4 +1,4 @@
-base) password@patrickm24:~/hpc2025/chapter12/exercise12_1$ mpicxx exercise12_1.cpp -o exercise12_1.o
+(base) password@patrickm24:~/hpc2025/chapter12/exercise12_1$ mpicxx exercise12_1.cpp -o exercise12_1.o
 (base) password@patrickm24:~/hpc2025/chapter12/exercise12_1$ mpicxx exercise12_1.cpp -o exercise12_1.o
 (base) password@patrickm24:~/hpc2025/chapter12/exercise12_1$ mpiexec -np 5 ./exercise12_1.o
 enter an integer: 11
